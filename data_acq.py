@@ -20,6 +20,7 @@ sp = spotipy.Spotify(auth_manager=SpotifyOAuth(
     scope=SCOPE
 ))
 
+
 # Fetch Top 200 tracks
 top_tracks = []
 for offset in range(0, 200, 50):  # 0, 50, 100, 150
@@ -28,6 +29,8 @@ for offset in range(0, 200, 50):  # 0, 50, 100, 150
 
 top_tracks = top_tracks[:-1]
 print(f"Fetched {len(top_tracks)} top tracks.")
+
+
 
 # Write CSV including duration_ms and track id
 with open("top_200_tracks.csv", "w", newline="", encoding="utf-8") as csvfile:
