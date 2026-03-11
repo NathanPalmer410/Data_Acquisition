@@ -3,6 +3,7 @@ from spotipy.oauth2 import SpotifyOAuth
 from dotenv import load_dotenv
 import os 
 import csv
+import pandas as pd
 
 # Load credentials from .env
 load_dotenv()
@@ -34,19 +35,23 @@ with open("top_200_tracks.csv", "w", newline="", encoding="utf-8") as csvfile:
     writer = csv.writer(csvfile)
     writer.writerow([
         "Rank", "Track Name", "Artists", "Album",
-        "Duration (ms)", "Track ID"
+        "Duration_seconds", "Track ID"
     ])
 
     for idx, track in enumerate(top_tracks, start=1):
         artists = ', '.join([a['name'] for a in track['artists']])
+        duration_seconds = track['duration_ms']/ 1000
         writer.writerow([
             idx,
             track['name'],
             artists,
             track['album']['name'],
-            track['duration_ms'],
+            duration_seconds,
             track['id']
         ])
 
 print("Saved top 200 tracks to top_200_tracks.csv")
 
+top_200 = pd.read_csv("top_200_tracks.csv")
+pearson_corr = top_200['Rank'].corr(top_200['Duration_seconds'], method='pearson')
+print(pearson_corr)
